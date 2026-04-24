@@ -14,7 +14,7 @@ class GreedyBestFirstSearch:
 
         while not frontera.is_empty():
             n = frontera.pop()
-
+            
             if grid.objective_test(n.state):
                 return Solution(n, reached)
 

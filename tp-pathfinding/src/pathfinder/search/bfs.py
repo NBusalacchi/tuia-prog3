@@ -7,14 +7,21 @@ from ..models.node import Node
 class BreadthFirstSearch:
     @staticmethod
     def search(grid: Grid) -> Solution:
+        
+        #creamos la Raiz
         root = Node("", state=grid.initial, cost=0, parent=None, action=None)
-
+        
+        #Diccionario de Alcanzados
         reached = {}
+        
+        #Frontera
         frontera = QueueFrontier()
-
+        
+        #Agreamamos la raiz a la frontera y el estado inicial al los alcanzados
         frontera.add(root)
         reached[root.state] = True
-
+        
+        #Comprobamos si el estado inicial es el Optimo, en caso contrario continua
         if grid.objective_test(root.state):
             return Solution(root, reached)
 

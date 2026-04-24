@@ -15,6 +15,21 @@ class Grid:
         # Calculate grid dimensions
         self.width = max(len(row) for row in grid)
         self.height = len(grid)
+        
+    import math
+    
+    def heuristic(self, state: tuple) -> float:
+        """
+        Calcula la distancia heurística desde el estado actual hasta la meta
+        ignorando las paredes (Distancia Manhattan).
+        """
+
+        x_actual, y_actual = state
+        x_meta, y_meta = self.end
+
+        distancia = abs(x_actual - x_meta) + abs(y_actual - y_meta)
+
+        return float(distancia)
 
     def actions(self, pos: tuple[int, int]) -> list[str]:
         """Determine the possible actions from a cell
@@ -46,7 +61,7 @@ class Grid:
             if not (0 <= r < self.height and 0 <= c < self.width):
                 continue
 
-            if self.grid[r][c].value == "#":
+            if self.grid[r][c].value in ["#"]: 
                 continue
 
             possible_actions.append(action)
@@ -111,3 +126,5 @@ class Grid:
 
     def __repr__(self) -> str:
         return f"Grid([[...], ...], {self.initial}, {self.end})"
+    
+
