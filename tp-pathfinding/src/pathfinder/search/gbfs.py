@@ -6,25 +6,44 @@ from ..models.node import Node
 class GreedyBestFirstSearch:
     @staticmethod
     def search(grid: Grid) -> Solution:
+        
+        # creamos la raiz
         root = Node("", state=grid.initial, cost=0, parent=None, action=None)
+        
+        # diccionario de alcanzados para no ciclar
         reached = {}
+        
+        # frontera de cola de prioridad para greedy
         frontera = PriorityQueueFrontier()
 
+        # agregamos la raiz a la frontera usando solo la heuristica como prioridad
         frontera.add(root, grid.heuristic(root.state)) 
 
+        # iniciamos el bucle principal
         while not frontera.is_empty():
+            
+            # sacamos el nodo con la heuristica mas baja (distancia de manhatan)
             n = frontera.pop()
             
+            # comprobamos si llegamos al objetivo
             if grid.objective_test(n.state):
                 return Solution(n, reached)
 
+            # si ya habiamos visitado este estado lo salteamos
             if n.state in reached:
                 continue
+                
+            # lo marcamos como visitado para no volver a procesarlo
             reached[n.state] = True
 
+            # exploramos todos los movimientos permitidos desde ese nodo
             for a in grid.actions(n.state):
+                # calculamos en que casilla caemos tras movernos
                 s = grid.result(n.state, a)
+                
+                # si es una casilla por la que nunca pasamos
                 if s not in reached:
+                    # armamos el nodo del hijo
                     son = Node(
                         "",
                         state=s,
@@ -32,6 +51,9 @@ class GreedyBestFirstSearch:
                         parent=n,
                         action=a,
                     )
+                    
+                    # lo mandamos a la frontera ordenado por su valor heuristico puro
                     frontera.add(son, grid.heuristic(s)) 
 
+        # por si se agota la frontera y no habia solucion posible
         return NoSolution(reached)
