@@ -60,3 +60,4 @@ class AStarSearch:
 
         # por si se agota la frontera y no habia solucion posible
         return NoSolution(reached)
+    
